@@ -109,6 +109,11 @@ public class MainForm extends javax.swing.JDialog {
         btnAddNewProduct = new javax.swing.JButton();
         btnSaveProduct = new javax.swing.JButton();
         btnDeleteProduct = new javax.swing.JButton();
+        lbProductID = new javax.swing.JLabel();
+        lbProductName = new javax.swing.JLabel();
+        lbUnit = new javax.swing.JLabel();
+        lbQuantity = new javax.swing.JLabel();
+        lbPrice = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -347,6 +352,16 @@ public class MainForm extends javax.swing.JDialog {
             }
         });
 
+        lbProductID.setForeground(new java.awt.Color(255, 51, 51));
+
+        lbProductName.setForeground(new java.awt.Color(255, 51, 51));
+
+        lbUnit.setForeground(new java.awt.Color(255, 51, 51));
+
+        lbQuantity.setForeground(new java.awt.Color(255, 51, 51));
+
+        lbPrice.setForeground(new java.awt.Color(255, 51, 51));
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
@@ -354,6 +369,13 @@ public class MainForm extends javax.swing.JDialog {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(btnAddNewProduct)
+                        .addGap(38, 38, 38)
+                        .addComponent(btnSaveProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                        .addComponent(btnDeleteProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25))
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
@@ -363,21 +385,20 @@ public class MainForm extends javax.swing.JDialog {
                             .addComponent(jLabel9)
                             .addComponent(jLabel6))
                         .addGap(56, 56, 56)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtProductID)
-                            .addComponent(txtProductName)
-                            .addComponent(txtUnit)
-                            .addComponent(cbCategoryName, 0, 136, Short.MAX_VALUE)
-                            .addComponent(txtQuantity)
-                            .addComponent(txtPrice))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(btnAddNewProduct)
-                        .addGap(38, 38, 38)
-                        .addComponent(btnSaveProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-                        .addComponent(btnDeleteProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(25, 25, 25))))
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbProductID)
+                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtProductID)
+                                .addComponent(txtProductName)
+                                .addComponent(txtUnit)
+                                .addComponent(cbCategoryName, 0, 136, Short.MAX_VALUE)
+                                .addComponent(txtQuantity)
+                                .addComponent(txtPrice))
+                            .addComponent(lbProductName)
+                            .addComponent(lbUnit)
+                            .addComponent(lbQuantity)
+                            .addComponent(lbPrice))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -386,11 +407,15 @@ public class MainForm extends javax.swing.JDialog {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(txtProductID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
+                .addGap(2, 2, 2)
+                .addComponent(lbProductID)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(txtProductName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(39, 39, 39)
+                .addGap(10, 10, 10)
+                .addComponent(lbProductName)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(cbCategoryName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -398,15 +423,21 @@ public class MainForm extends javax.swing.JDialog {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(txtUnit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(41, 41, 41)
+                .addGap(12, 12, 12)
+                .addComponent(lbUnit)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8)
                     .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
+                .addGap(13, 13, 13)
+                .addComponent(lbQuantity)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
+                .addGap(8, 8, 8)
+                .addComponent(lbPrice)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddNewProduct)
                     .addComponent(btnSaveProduct)
@@ -454,6 +485,7 @@ public class MainForm extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblCategoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCategoryMouseClicked
+        setLabelCategory();
         int pos = tblCategory.getSelectedRow();
         TblCategoriesDTO dto = categoryFullModel.getCategories().get(pos);
         txtCategoryID.setText(dto.getCategoryID());
@@ -467,6 +499,7 @@ public class MainForm extends javax.swing.JDialog {
     }//GEN-LAST:event_tblCategoryMouseClicked
 
     private void btnAddNewCateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNewCateActionPerformed
+        setLabelCategory();
         txtCategoryID.setText("");
         txtCategoryName.setText("");
         txtDescription.setText("");
@@ -475,14 +508,14 @@ public class MainForm extends javax.swing.JDialog {
         btnSaveCate.setEnabled(true);
     }//GEN-LAST:event_btnAddNewCateActionPerformed
     public boolean checkEmptyFieldCategory() {
-        if (txtCategoryID.getText().isEmpty()) {
+        if (txtCategoryID.getText().trim().isEmpty()) {
             lbCategoryID.setText("Category ID must'n be empty");
             return true;
-        } else if (txtCategoryName.getText().isEmpty()) {
+        } else if (txtCategoryName.getText().trim().isEmpty()) {
             lbCategoryID.setText("");
             lbCategoryName.setText("Category Name must'n be empty");
             return true;
-        } else if (txtDescription.getText().isEmpty()) {
+        } else if (txtDescription.getText().trim().isEmpty()) {
             lbCategoryName.setText("");
             lbCategoryID.setText("");
             lbDescription.setText("Description must'n be empty");
@@ -503,30 +536,33 @@ public class MainForm extends javax.swing.JDialog {
         txtDescription.setText("");
     }
     private void btnSaveCateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveCateActionPerformed
+//      Kiểm tra các miền nhập dữ liệu của bảng category
+        if (checkEmptyFieldCategory()) {
+            return;
+        }
         String categoryID = txtCategoryID.getText();
         String categoryName = txtCategoryName.getText();
         String description = txtDescription.getText();
         TblCategoriesDTO dto = new TblCategoriesDTO(categoryID, categoryName, description);
-        TblCategoriesDAO cateDAO = new TblCategoriesDAO();
+//      Kiểm tra trạng thái addNewCategory để thêm hoặc sửa
         if (addNewCategory) {
             try {
-                boolean duplicateCate = cateDAO.findCategory(categoryID);
+//      Add Category Function
+//      Kiểm tra category trùng      
+                boolean duplicateCate = categories.findCategory(categoryID);
                 if (duplicateCate) {
                     JOptionPane.showMessageDialog(this, "Duplicate categoryID");
                 } else {
-                    boolean emptyCheck = checkEmptyFieldCategory();
-                    if (!emptyCheck) {
-                        boolean rsInsert = cateDAO.insertCategory(dto);
-                        if (rsInsert) {
-                            categoryFullModel.getCategories().add(dto);
-                            tblCategory.updateUI();
-                            setTextFieldCategory();
-                            btnSaveCate.setEnabled(false);
-                            setLabelCategory();
-                            JOptionPane.showMessageDialog(this, "Date save");
-                        } else {
-                            JOptionPane.showMessageDialog(this, "Can't Save");
-                        }
+                    boolean rsInsert = categories.insertCategory(dto);
+                    if (rsInsert) {
+                        categoryFullModel.getCategories().add(dto);
+                        tblCategory.updateUI();
+                        setTextFieldCategory();
+                        btnSaveCate.setEnabled(false);
+                        setLabelCategory();
+                        JOptionPane.showMessageDialog(this, "Date save");
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Can't Save");
                     }
                 }
             } catch (SQLException | ClassNotFoundException ex) {
@@ -534,16 +570,22 @@ public class MainForm extends javax.swing.JDialog {
             }
         } else {
             try {
-                boolean rsUpdate = cateDAO.updateCategory(categoryID, categoryName, description);
+//      Update function
+                boolean rsUpdate = categories.updateCategory(categoryID, categoryName, description);
                 if (rsUpdate) {
                     int rowSelect = tblCategory.getSelectedRow();
-                    tblCategory.updateUI();
+//      sửa các miền nhập của category thành ""
                     setTextFieldCategory();
+//      sửa các label cảnh báo category lại thành ""
+                    setLabelCategory();
                     btnAddNewCate.setEnabled(true);
                     btnSaveCate.setEnabled(false);
                     btnDeleteCate.setEnabled(false);
                     txtCategoryID.setEditable(true);
+//      sửa lại dữ liệu trong bảng model
                     categoryFullModel.getCategories().set(rowSelect, dto);
+//      Cập nhật lại thông tin trong bảng cate
+                    tblCategory.updateUI();
                     JOptionPane.showMessageDialog(this, "Data save");
                 } else {
                     JOptionPane.showMessageDialog(this, "can't save");
@@ -559,25 +601,26 @@ public class MainForm extends javax.swing.JDialog {
         String categoryID = txtCategoryID.getText();
         int rsChoice = JOptionPane.showConfirmDialog(this, "Do you want to delete " + categoryID, "Yes/No", JOptionPane.YES_NO_OPTION);
         if (rsChoice == JOptionPane.YES_OPTION) {
-            TblCategoriesDAO cateDAO = new TblCategoriesDAO();
             boolean rsDelete;
             try {
+//      Delete Function
                 if (!addNewCategory) {
+//      Kiểm tra category có chứa product nào không
                     boolean checkCategory = products.findProduct(categoryID);
                     if (checkCategory) {
                         JOptionPane.showMessageDialog(this, "Please delete product which contain this category first");
                         return;
                     } else {
                         int selectRow = tblCategory.getSelectedRow();
-                        rsDelete = cateDAO.deleteCategory(categoryID);
+                        rsDelete = categories.deleteCategory(categoryID);
                         if (rsDelete) {
-                            tblCategory.updateUI();
                             categoryFullModel.getCategories().remove(selectRow);
+                            tblCategory.updateUI();
                             btnAddNewCate.setEnabled(true);
                             btnDeleteCate.setEnabled(false);
                             btnSaveCate.setEnabled(false);
                             txtCategoryID.setEditable(true);
-
+//      Cập nhật miền nhập category thành "" 
                             setTextFieldCategory();
                             JOptionPane.showMessageDialog(this, "Delete successfully !!");
                         } else {
@@ -609,6 +652,7 @@ public class MainForm extends javax.swing.JDialog {
         btnSaveProduct.setEnabled(true);
         btnAddNewProduct.setEnabled(false);
         txtProductID.setEditable(false);
+        setLabelProduct();
     }//GEN-LAST:event_tblProductsMouseClicked
 
     private void btnAddNewProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNewProductActionPerformed
@@ -621,28 +665,91 @@ public class MainForm extends javax.swing.JDialog {
         txtProductID.setEditable(true);
         btnSaveProduct.setEnabled(true);
     }//GEN-LAST:event_btnAddNewProductActionPerformed
+    public boolean checkEmptyFieldProduct() {
+        if (txtProductID.getText().trim().isEmpty()) {
+            lbProductID.setText("Product ID musn't be empty");
+            return true;
+        } else if (txtProductName.getText().trim().isEmpty()) {
+            lbProductID.setText("");
+            lbProductName.setText("Product Name must'n be empty");
+            return true;
+        } else if (txtUnit.getText().trim().isEmpty()) {
+            lbProductID.setText("");
+            lbProductName.setText("");
+            lbUnit.setText("Unit must'n be empty");
+            return true;
+        } else if (txtQuantity.getText().trim().isEmpty()) {
+            lbProductID.setText("");
+            lbProductName.setText("");
+            lbUnit.setText("");
+            lbQuantity.setText("Quantity must't be empty");
+            return true;
+        } else if (txtPrice.getText().trim().isEmpty()) {
+            lbProductID.setText("");
+            lbProductName.setText("");
+            lbUnit.setText("");
+            lbQuantity.setText("");
+            lbPrice.setText("Price must'n be empty");
+            return true;
+        }
+        return false;
+    }
 
+    public void setLabelProduct() {
+        lbProductID.setText("");
+        lbProductName.setText("");
+        lbUnit.setText("");
+        lbPrice.setText("");
+        lbQuantity.setText("");
+    }
+
+    public void setTextFieldProduct() {
+        txtProductID.setText("");
+        txtProductName.setText("");
+        txtQuantity.setText("");
+        txtUnit.setText("");
+        txtPrice.setText("");
+    }
     private void btnSaveProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveProductActionPerformed
+//      Kiểm tra thông tin người dùng nhập ở product
+        if (checkEmptyFieldProduct()) {
+            return;
+        }
         String productID = txtProductID.getText();
         String productName = txtProductName.getText();
-        String unit = txtUnit.getText();
-        float price = Float.parseFloat(txtPrice.getText());
-        int quantity = Integer.parseInt(txtQuantity.getText());
+        String unit = txtUnit.getText();        
+        float price = 0;
+        int quantity = 0;
+//      Kiểm tra điều kiện nhập quantity
+        try {            
+            quantity = Integer.parseInt(txtQuantity.getText());
+        } catch (NumberFormatException e) {
+            lbQuantity.setText("Quantity must be integer");            
+            return;
+        }
+//      Kiểm tra điều kiện nhập price
+        try {
+            price = Float.parseFloat(txtPrice.getText());
+        } catch (NumberFormatException e) {
+            lbQuantity.setText("");
+            lbPrice.setText("Price must be float");
+            return;
+        }
+        
         TblCategoriesDTO category = (TblCategoriesDTO) cbCategoryName.getSelectedItem();
         TblProductsDTO dto = new TblProductsDTO(productID, productName, unit, price, quantity, category);
-        TblProductsDAO productsDAO = new TblProductsDAO();
+//      Kiểm tra trạng thái của addNewProduct để thêm product hay update Product
         if (addNewProduct) {
-
+//      Add new Product function
             try {
-                boolean rsAddProduct = productsDAO.insertProduct(dto);
+                boolean rsAddProduct = products.insertProduct(dto);
                 if (rsAddProduct) {
                     productFullModel.getProducts().add(dto);
                     tblProducts.updateUI();
-                    txtProductID.setText("");
-                    txtProductName.setText("");
-                    txtQuantity.setText("");
-                    txtUnit.setText("");
-                    txtPrice.setText("");
+//      Cập nhật miền nhập product thành ""                  
+                    setTextFieldProduct();
+//      Cập nhật label product thành ""                  
+                    setLabelProduct();
                     JOptionPane.showMessageDialog(this, "Data save");
                 }
             } catch (SQLException | ClassNotFoundException ex) {
@@ -650,14 +757,14 @@ public class MainForm extends javax.swing.JDialog {
             }
         } else {
             try {
-                boolean rsUpdateProduct = productsDAO.updateProduct(dto);
+//      Update product function
+                boolean rsUpdateProduct = products.updateProduct(dto);
                 if (rsUpdateProduct) {
                     int selectRow = tblProducts.getSelectedRow();
-                    txtProductID.setText("");
-                    txtProductName.setText("");
-                    txtQuantity.setText("");
-                    txtUnit.setText("");
-                    txtPrice.setText("");
+//      Cập nhật miền nhập product thành ""
+                    setTextFieldProduct();
+//      Cập nhật label product thành ""
+                    setLabelProduct();
                     txtProductID.setEditable(true);
                     btnDeleteProduct.setEnabled(false);
                     btnSaveProduct.setEnabled(false);
@@ -679,17 +786,14 @@ public class MainForm extends javax.swing.JDialog {
             int choice = JOptionPane.showConfirmDialog(this, "Do you want to delete " + productID, "YES/NO", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION) {
                 int selectRow = tblProducts.getSelectedRow();
-                TblProductsDAO productsDAO = new TblProductsDAO();
                 try {
-                    boolean rsDelete = productsDAO.deleteProducts(productID);
+//      Delete Product Function
+                    boolean rsDelete = products.deleteProducts(productID);
                     if (rsDelete) {
                         productFullModel.getProducts().remove(selectRow);
                         tblProducts.updateUI();
-                        txtProductID.setText("");
-                        txtProductName.setText("");
-                        txtUnit.setText("");
-                        txtPrice.setText("");
-                        txtQuantity.setText("");
+//      Cập nhật miền nhập product thành ""                        
+                        setTextFieldProduct();
                         txtProductID.setEditable(true);
                         btnAddNewProduct.setEnabled(true);
                         btnDeleteProduct.setEnabled(false);
@@ -785,6 +889,11 @@ public class MainForm extends javax.swing.JDialog {
     private javax.swing.JLabel lbCategoryID;
     private javax.swing.JLabel lbCategoryName;
     private javax.swing.JLabel lbDescription;
+    private javax.swing.JLabel lbPrice;
+    private javax.swing.JLabel lbProductID;
+    private javax.swing.JLabel lbProductName;
+    private javax.swing.JLabel lbQuantity;
+    private javax.swing.JLabel lbUnit;
     private javax.swing.JTable tblCategory;
     private javax.swing.JTable tblProducts;
     private javax.swing.JTextField txtCategoryID;
