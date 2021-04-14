@@ -10,13 +10,15 @@ package dang.dto;
  * @author Admin
  */
 public class TblCategoriesDTO {
-    private String categoryID;
-    private String categoryName;
-    private String Description;
+
+    String categoryID;
+    String categoryName;
+    String Description;
 
     public TblCategoriesDTO() {
     }
 
+    
     public TblCategoriesDTO(String categoryID, String categoryName, String Description) {
         this.categoryID = categoryID;
         this.categoryName = categoryName;
@@ -64,6 +66,9 @@ public class TblCategoriesDTO {
     public void setDescription(String Description) {
         this.Description = Description;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return categoryName;
+    }
 }

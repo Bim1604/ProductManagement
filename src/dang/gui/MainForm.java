@@ -6,11 +6,15 @@
 package dang.gui;
 
 import dang.dao.TblCategoriesDAO;
+import dang.dao.TblProductsDAO;
 import dang.dto.CategoryFullModel;
+import dang.dto.ProductFullModel;
 import dang.dto.TblCategoriesDTO;
+import dang.dto.TblProductsDTO;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 /**
@@ -21,7 +25,10 @@ public class MainForm extends javax.swing.JDialog {
 
     TblCategoriesDAO categories;
     CategoryFullModel categoryFullModel;
-    boolean addNewItems = true;
+    TblProductsDAO products;
+    ProductFullModel productFullModel;
+    boolean addNewCategory = true;
+    boolean addNewProduct = true;
 
     /**
      * Creates new form MainForm
@@ -39,12 +46,19 @@ public class MainForm extends javax.swing.JDialog {
         categoryFullModel = new CategoryFullModel(categories);
         btnDeleteCate.setEnabled(false);
         btnSaveCate.setEnabled(false);
+        btnDeleteProduct.setEnabled(false);
+        btnSaveProduct.setEnabled(false);
+        products = new TblProductsDAO();
+        products.loadFromDB(categories);
+        productFullModel = new ProductFullModel(products);
         setupModel();
 
     }
 
     public final void setupModel() {
         tblCategory.setModel(categoryFullModel);
+        tblProducts.setModel(productFullModel);
+        this.cbCategoryName.setModel(new DefaultComboBoxModel(categories));
     }
 
     /**
@@ -69,6 +83,9 @@ public class MainForm extends javax.swing.JDialog {
         btnAddNewCate = new javax.swing.JButton();
         btnSaveCate = new javax.swing.JButton();
         btnDeleteCate = new javax.swing.JButton();
+        lbCategoryID = new javax.swing.JLabel();
+        lbCategoryName = new javax.swing.JLabel();
+        lbDescription = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblCategory = new javax.swing.JTable();
@@ -77,6 +94,21 @@ public class MainForm extends javax.swing.JDialog {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblProducts = new javax.swing.JTable();
         jPanel7 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        txtProductID = new javax.swing.JTextField();
+        txtProductName = new javax.swing.JTextField();
+        txtUnit = new javax.swing.JTextField();
+        txtQuantity = new javax.swing.JTextField();
+        txtPrice = new javax.swing.JTextField();
+        cbCategoryName = new javax.swing.JComboBox<>();
+        btnAddNewProduct = new javax.swing.JButton();
+        btnSaveProduct = new javax.swing.JButton();
+        btnDeleteProduct = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -120,6 +152,12 @@ public class MainForm extends javax.swing.JDialog {
             }
         });
 
+        lbCategoryID.setForeground(new java.awt.Color(255, 0, 0));
+
+        lbCategoryName.setForeground(new java.awt.Color(255, 0, 0));
+
+        lbDescription.setForeground(new java.awt.Color(255, 0, 0));
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -128,22 +166,26 @@ public class MainForm extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(btnAddNewCate)
+                        .addGap(26, 26, 26)
+                        .addComponent(btnSaveCate)
+                        .addGap(26, 26, 26)
+                        .addComponent(btnDeleteCate, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel3)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtCategoryID)
-                            .addComponent(txtCategoryName)
-                            .addComponent(txtDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(btnAddNewCate)
-                        .addGap(26, 26, 26)
-                        .addComponent(btnSaveCate)
-                        .addGap(26, 26, 26)
-                        .addComponent(btnDeleteCate, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)))
-                .addContainerGap(23, Short.MAX_VALUE))
+                            .addComponent(lbDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
+                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(lbCategoryID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtCategoryID)
+                                .addComponent(txtCategoryName)
+                                .addComponent(txtDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
+                                .addComponent(lbCategoryName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -152,15 +194,21 @@ public class MainForm extends javax.swing.JDialog {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtCategoryID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(38, 38, 38)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbCategoryID)
+                .addGap(15, 15, 15)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtCategoryName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(53, 53, 53)
+                .addGap(18, 18, 18)
+                .addComponent(lbCategoryName)
+                .addGap(19, 19, 19)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(63, 63, 63)
+                .addGap(18, 18, 18)
+                .addComponent(lbDescription)
+                .addGap(29, 29, 29)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddNewCate)
                     .addComponent(btnSaveCate)
@@ -238,6 +286,11 @@ public class MainForm extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblProducts.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblProductsMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tblProducts);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -247,7 +300,7 @@ public class MainForm extends javax.swing.JDialog {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -259,15 +312,106 @@ public class MainForm extends javax.swing.JDialog {
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Detailed part:"));
 
+        jLabel4.setText("Product ID:");
+
+        jLabel5.setText("Product Name:");
+
+        jLabel6.setText("Category Name:");
+
+        jLabel7.setText("Unit: ");
+
+        jLabel8.setText("Quantity: ");
+
+        jLabel9.setText("Price: ");
+
+        cbCategoryName.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        btnAddNewProduct.setText("Add New");
+        btnAddNewProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddNewProductActionPerformed(evt);
+            }
+        });
+
+        btnSaveProduct.setText("Save");
+        btnSaveProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveProductActionPerformed(evt);
+            }
+        });
+
+        btnDeleteProduct.setText("Delete");
+        btnDeleteProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteProductActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 314, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel6))
+                        .addGap(56, 56, 56)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtProductID)
+                            .addComponent(txtProductName)
+                            .addComponent(txtUnit)
+                            .addComponent(cbCategoryName, 0, 136, Short.MAX_VALUE)
+                            .addComponent(txtQuantity)
+                            .addComponent(txtPrice))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(btnAddNewProduct)
+                        .addGap(38, 38, 38)
+                        .addComponent(btnSaveProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                        .addComponent(btnDeleteProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25))))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtProductID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtProductName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(39, 39, 39)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(cbCategoryName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(48, 48, 48)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(txtUnit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(41, 41, 41)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8)
+                    .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(36, 36, 36)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(37, 37, 37)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAddNewProduct)
+                    .addComponent(btnSaveProduct)
+                    .addComponent(btnDeleteProduct))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -315,7 +459,7 @@ public class MainForm extends javax.swing.JDialog {
         txtCategoryID.setText(dto.getCategoryID());
         txtCategoryName.setText(dto.getCategoryName());
         txtDescription.setText(dto.getDescription());
-        addNewItems = false;
+        addNewCategory = false;
         txtCategoryID.setEditable(false);
         btnAddNewCate.setEnabled(false);
         btnDeleteCate.setEnabled(true);
@@ -326,34 +470,63 @@ public class MainForm extends javax.swing.JDialog {
         txtCategoryID.setText("");
         txtCategoryName.setText("");
         txtDescription.setText("");
-        addNewItems = true;
+        addNewCategory = true;
         txtCategoryID.setEditable(true);
         btnSaveCate.setEnabled(true);
     }//GEN-LAST:event_btnAddNewCateActionPerformed
+    public boolean checkEmptyFieldCategory() {
+        if (txtCategoryID.getText().isEmpty()) {
+            lbCategoryID.setText("Category ID must'n be empty");
+            return true;
+        } else if (txtCategoryName.getText().isEmpty()) {
+            lbCategoryID.setText("");
+            lbCategoryName.setText("Category Name must'n be empty");
+            return true;
+        } else if (txtDescription.getText().isEmpty()) {
+            lbCategoryName.setText("");
+            lbCategoryID.setText("");
+            lbDescription.setText("Description must'n be empty");
+            return true;
+        }
+        return false;
+    }
 
+    public void setLabelCategory() {
+        lbCategoryID.setText("");
+        lbCategoryName.setText("");
+        lbDescription.setText("");
+    }
+
+    public void setTextFieldCategory() {
+        txtCategoryID.setText("");
+        txtCategoryName.setText("");
+        txtDescription.setText("");
+    }
     private void btnSaveCateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveCateActionPerformed
         String categoryID = txtCategoryID.getText();
         String categoryName = txtCategoryName.getText();
         String description = txtDescription.getText();
         TblCategoriesDTO dto = new TblCategoriesDTO(categoryID, categoryName, description);
         TblCategoriesDAO cateDAO = new TblCategoriesDAO();
-        if (addNewItems) {
+        if (addNewCategory) {
             try {
                 boolean duplicateCate = cateDAO.findCategory(categoryID);
                 if (duplicateCate) {
                     JOptionPane.showMessageDialog(this, "Duplicate categoryID");
                 } else {
-                    boolean rsInsert = cateDAO.insertCategory(dto);
-                    if (rsInsert) {
-                        categoryFullModel.getCategories().add(dto);
-                        tblCategory.updateUI();
-                        txtCategoryID.setText("");
-                        txtCategoryName.setText("");
-                        txtDescription.setText("");
-                        btnSaveCate.setEnabled(false);
-                        JOptionPane.showMessageDialog(this, "Date save");
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Can't Save");
+                    boolean emptyCheck = checkEmptyFieldCategory();
+                    if (!emptyCheck) {
+                        boolean rsInsert = cateDAO.insertCategory(dto);
+                        if (rsInsert) {
+                            categoryFullModel.getCategories().add(dto);
+                            tblCategory.updateUI();
+                            setTextFieldCategory();
+                            btnSaveCate.setEnabled(false);
+                            setLabelCategory();
+                            JOptionPane.showMessageDialog(this, "Date save");
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Can't Save");
+                        }
                     }
                 }
             } catch (SQLException | ClassNotFoundException ex) {
@@ -365,9 +538,7 @@ public class MainForm extends javax.swing.JDialog {
                 if (rsUpdate) {
                     int rowSelect = tblCategory.getSelectedRow();
                     tblCategory.updateUI();
-                    txtCategoryID.setText("");
-                    txtCategoryName.setText("");
-                    txtDescription.setText("");
+                    setTextFieldCategory();
                     btnAddNewCate.setEnabled(true);
                     btnSaveCate.setEnabled(false);
                     btnDeleteCate.setEnabled(false);
@@ -380,7 +551,7 @@ public class MainForm extends javax.swing.JDialog {
             } catch (SQLException | ClassNotFoundException ex) {
                 Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
             }
-            addNewItems = true;
+            addNewCategory = true;
         }
     }//GEN-LAST:event_btnSaveCateActionPerformed
 
@@ -391,19 +562,27 @@ public class MainForm extends javax.swing.JDialog {
             TblCategoriesDAO cateDAO = new TblCategoriesDAO();
             boolean rsDelete;
             try {
-                if (!addNewItems) {
-                    int selectRow = tblCategory.getSelectedRow();
-                    rsDelete = cateDAO.deleteCategory(categoryID);
-                    if (rsDelete) {
-                        tblCategory.updateUI();
-                        categoryFullModel.getCategories().remove(selectRow);
-                        btnAddNewCate.setEnabled(true);
-                        btnDeleteCate.setEnabled(false);
-                        btnSaveCate.setEnabled(false);
-                        txtCategoryID.setEditable(true);
-                        JOptionPane.showMessageDialog(this, "Delete successfully !!");
+                if (!addNewCategory) {
+                    boolean checkCategory = products.findProduct(categoryID);
+                    if (checkCategory) {
+                        JOptionPane.showMessageDialog(this, "Please delete product which contain this category first");
+                        return;
                     } else {
-                        JOptionPane.showMessageDialog(this, "Can't delete");
+                        int selectRow = tblCategory.getSelectedRow();
+                        rsDelete = cateDAO.deleteCategory(categoryID);
+                        if (rsDelete) {
+                            tblCategory.updateUI();
+                            categoryFullModel.getCategories().remove(selectRow);
+                            btnAddNewCate.setEnabled(true);
+                            btnDeleteCate.setEnabled(false);
+                            btnSaveCate.setEnabled(false);
+                            txtCategoryID.setEditable(true);
+
+                            setTextFieldCategory();
+                            JOptionPane.showMessageDialog(this, "Delete successfully !!");
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Can't delete");
+                        }
                     }
                 } else {
                     JOptionPane.showMessageDialog(this, "Can't delete");
@@ -411,9 +590,121 @@ public class MainForm extends javax.swing.JDialog {
             } catch (SQLException | ClassNotFoundException ex) {
                 Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
             }
-            addNewItems = true;
+            addNewCategory = true;
         }
     }//GEN-LAST:event_btnDeleteCateActionPerformed
+
+    private void tblProductsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductsMouseClicked
+        int row = tblProducts.getSelectedRow();
+        TblProductsDTO dto = productFullModel.getProducts().get(row);
+        txtProductID.setText(dto.getProductID());
+        txtProductName.setText(dto.getProductName());
+        txtUnit.setText(dto.getUnit());
+        txtPrice.setText("" + dto.getPrice());
+        txtQuantity.setText("" + dto.getQuantity());
+        int index = categories.findCate(dto.getCategory().getCategoryID());
+        cbCategoryName.setSelectedIndex(index);
+        addNewProduct = false;
+        btnDeleteProduct.setEnabled(true);
+        btnSaveProduct.setEnabled(true);
+        btnAddNewProduct.setEnabled(false);
+        txtProductID.setEditable(false);
+    }//GEN-LAST:event_tblProductsMouseClicked
+
+    private void btnAddNewProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNewProductActionPerformed
+        txtProductID.setText("");
+        txtProductName.setText("");
+        txtQuantity.setText("");
+        txtUnit.setText("");
+        txtPrice.setText("");
+        addNewProduct = true;
+        txtProductID.setEditable(true);
+        btnSaveProduct.setEnabled(true);
+    }//GEN-LAST:event_btnAddNewProductActionPerformed
+
+    private void btnSaveProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveProductActionPerformed
+        String productID = txtProductID.getText();
+        String productName = txtProductName.getText();
+        String unit = txtUnit.getText();
+        float price = Float.parseFloat(txtPrice.getText());
+        int quantity = Integer.parseInt(txtQuantity.getText());
+        TblCategoriesDTO category = (TblCategoriesDTO) cbCategoryName.getSelectedItem();
+        TblProductsDTO dto = new TblProductsDTO(productID, productName, unit, price, quantity, category);
+        TblProductsDAO productsDAO = new TblProductsDAO();
+        if (addNewProduct) {
+
+            try {
+                boolean rsAddProduct = productsDAO.insertProduct(dto);
+                if (rsAddProduct) {
+                    productFullModel.getProducts().add(dto);
+                    tblProducts.updateUI();
+                    txtProductID.setText("");
+                    txtProductName.setText("");
+                    txtQuantity.setText("");
+                    txtUnit.setText("");
+                    txtPrice.setText("");
+                    JOptionPane.showMessageDialog(this, "Data save");
+                }
+            } catch (SQLException | ClassNotFoundException ex) {
+                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            try {
+                boolean rsUpdateProduct = productsDAO.updateProduct(dto);
+                if (rsUpdateProduct) {
+                    int selectRow = tblProducts.getSelectedRow();
+                    txtProductID.setText("");
+                    txtProductName.setText("");
+                    txtQuantity.setText("");
+                    txtUnit.setText("");
+                    txtPrice.setText("");
+                    txtProductID.setEditable(true);
+                    btnDeleteProduct.setEnabled(false);
+                    btnSaveProduct.setEnabled(false);
+                    btnAddNewProduct.setEnabled(true);
+                    productFullModel.getProducts().set(selectRow, dto);
+                    tblProducts.updateUI();
+                    JOptionPane.showMessageDialog(this, "Data save");
+                }
+            } catch (SQLException | ClassNotFoundException ex) {
+                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        addNewProduct = true;
+    }//GEN-LAST:event_btnSaveProductActionPerformed
+
+    private void btnDeleteProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteProductActionPerformed
+        if (!addNewProduct) {
+            String productID = txtProductID.getText();
+            int choice = JOptionPane.showConfirmDialog(this, "Do you want to delete " + productID, "YES/NO", JOptionPane.YES_NO_OPTION);
+            if (choice == JOptionPane.YES_OPTION) {
+                int selectRow = tblProducts.getSelectedRow();
+                TblProductsDAO productsDAO = new TblProductsDAO();
+                try {
+                    boolean rsDelete = productsDAO.deleteProducts(productID);
+                    if (rsDelete) {
+                        productFullModel.getProducts().remove(selectRow);
+                        tblProducts.updateUI();
+                        txtProductID.setText("");
+                        txtProductName.setText("");
+                        txtUnit.setText("");
+                        txtPrice.setText("");
+                        txtQuantity.setText("");
+                        txtProductID.setEditable(true);
+                        btnAddNewProduct.setEnabled(true);
+                        btnDeleteProduct.setEnabled(false);
+                        btnSaveProduct.setEnabled(false);
+                        JOptionPane.showMessageDialog(this, "Delete Successfully !!");
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Delete failed !!");
+                    }
+                    addNewProduct = true;
+                } catch (SQLException | ClassNotFoundException ex) {
+                    Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnDeleteProductActionPerformed
 
     /**
      * @param args the command line arguments
@@ -466,11 +757,21 @@ public class MainForm extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddNewCate;
+    private javax.swing.JButton btnAddNewProduct;
     private javax.swing.JButton btnDeleteCate;
+    private javax.swing.JButton btnDeleteProduct;
     private javax.swing.JButton btnSaveCate;
+    private javax.swing.JButton btnSaveProduct;
+    private javax.swing.JComboBox<String> cbCategoryName;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -481,10 +782,18 @@ public class MainForm extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel lbCategoryID;
+    private javax.swing.JLabel lbCategoryName;
+    private javax.swing.JLabel lbDescription;
     private javax.swing.JTable tblCategory;
     private javax.swing.JTable tblProducts;
     private javax.swing.JTextField txtCategoryID;
     private javax.swing.JTextField txtCategoryName;
     private javax.swing.JTextField txtDescription;
+    private javax.swing.JTextField txtPrice;
+    private javax.swing.JTextField txtProductID;
+    private javax.swing.JTextField txtProductName;
+    private javax.swing.JTextField txtQuantity;
+    private javax.swing.JTextField txtUnit;
     // End of variables declaration//GEN-END:variables
 }

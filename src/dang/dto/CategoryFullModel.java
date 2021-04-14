@@ -16,6 +16,7 @@ public class CategoryFullModel extends AbstractTableModel{
     TblCategoriesDAO categories;
 
     public CategoryFullModel() {
+        super();
     }
 
     public CategoryFullModel(TblCategoriesDAO categories) {

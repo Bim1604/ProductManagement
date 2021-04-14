@@ -17,19 +17,34 @@ import java.util.Vector;
  *
  * @author Admin
  */
-public class TblCategoriesDAO extends Vector<TblCategoriesDTO>{
-    public void loadFromDB() throws SQLException, ClassNotFoundException{
+public class TblCategoriesDAO extends Vector<TblCategoriesDTO> {
+
+    public int findCate(String cateID) {
+        for (int i = 0; i < this.size(); i++) {
+            if (cateID.equals(this.get(i).getCategoryID())) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public TblCategoriesDTO getCategories(String cateID) {
+        int pos = findCate(cateID);
+        return pos < 0 ? null : this.get(pos);
+    }
+
+    public void loadFromDB() throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        
+
         try {
             con = DBHelper.openConnection();
             String sql = "Select categoryID, categoryName, description "
                     + "From TblCategories";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 String categoryID = rs.getString(1);
                 String categoryName = rs.getString(2);
                 String description = rs.getString(3);
@@ -37,50 +52,50 @@ public class TblCategoriesDAO extends Vector<TblCategoriesDTO>{
                 this.add(dto);
             }
         } finally {
-            if (rs != null){
+            if (rs != null) {
                 rs.close();
             }
-            if (ps != null){
+            if (ps != null) {
                 ps.close();
             }
-            if (con != null){
+            if (con != null) {
                 con.close();
             }
         }
     }
-    
-    public boolean insertCategory(TblCategoriesDTO dto) throws SQLException, ClassNotFoundException{
+
+    public boolean insertCategory(TblCategoriesDTO dto) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement ps = null;
-        
+
         try {
             con = DBHelper.openConnection();
             String sql = "Insert into tblCategories (categoryID, categoryName, description) "
                     + "Values (?,?,?)";
             ps = con.prepareStatement(sql);
-            ps.setString(1,dto.getCategoryID());
-            ps.setString(2,dto.getCategoryName());
-            ps.setString(3,dto.getDescription());
+            ps.setString(1, dto.getCategoryID());
+            ps.setString(2, dto.getCategoryName());
+            ps.setString(3, dto.getDescription());
             int rs = ps.executeUpdate();
-            if (rs > 0){
+            if (rs > 0) {
                 return true;
             }
         } finally {
-            if (ps != null){
+            if (ps != null) {
                 ps.close();
             }
-            if (con != null){
+            if (con != null) {
                 con.close();
             }
         }
         return false;
     }
-    
-    public boolean findCategory(String categoryID) throws SQLException, ClassNotFoundException{
+
+    public boolean findCategory(String categoryID) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        
+
         try {
             con = DBHelper.openConnection();
             String sql = "Select categoryName "
@@ -89,27 +104,27 @@ public class TblCategoriesDAO extends Vector<TblCategoriesDTO>{
             ps = con.prepareStatement(sql);
             ps.setString(1, categoryID);
             rs = ps.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 return true;
             }
         } finally {
-            if (rs != null){
+            if (rs != null) {
                 rs.close();
             }
-            if (ps != null){
+            if (ps != null) {
                 ps.close();
             }
-            if (con != null){
+            if (con != null) {
                 con.close();
             }
         }
         return false;
     }
-    
-    public boolean updateCategory(String categoryID, String categoryName, String description) throws SQLException, ClassNotFoundException{
+
+    public boolean updateCategory(String categoryID, String categoryName, String description) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement ps = null;
-        
+
         try {
             con = DBHelper.openConnection();
             String sql = "Update tblCategories "
@@ -120,24 +135,24 @@ public class TblCategoriesDAO extends Vector<TblCategoriesDTO>{
             ps.setString(2, description);
             ps.setString(3, categoryID);
             int row = ps.executeUpdate();
-            if (row > 0){
+            if (row > 0) {
                 return true;
             }
         } finally {
-            if (ps != null){
+            if (ps != null) {
                 ps.close();
             }
-            if (con != null){
+            if (con != null) {
                 con.close();
             }
         }
         return false;
     }
-    
-    public boolean deleteCategory(String categoryID) throws SQLException, ClassNotFoundException{
+
+    public boolean deleteCategory(String categoryID) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement ps = null;
-        
+
         try {
             con = DBHelper.openConnection();
             String sql = "Delete "
@@ -146,14 +161,14 @@ public class TblCategoriesDAO extends Vector<TblCategoriesDTO>{
             ps = con.prepareStatement(sql);
             ps.setString(1, categoryID);
             int row = ps.executeUpdate();
-            if (row > 0){
+            if (row > 0) {
                 return true;
             }
         } finally {
-            if (ps != null){
+            if (ps != null) {
                 ps.close();
             }
-            if (con != null){
+            if (con != null) {
                 con.close();
             }
         }
