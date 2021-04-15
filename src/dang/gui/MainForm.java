@@ -7,10 +7,10 @@ package dang.gui;
 
 import dang.dao.TblCategoriesDAO;
 import dang.dao.TblProductsDAO;
-import dang.dto.CategoryFullModel;
-import dang.dto.ProductFullModel;
 import dang.dto.TblCategoriesDTO;
 import dang.dto.TblProductsDTO;
+import dang.logger.Log;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,12 +23,14 @@ import javax.swing.JOptionPane;
  */
 public class MainForm extends javax.swing.JDialog {
 
+    LoginForm loginForm;
     TblCategoriesDAO categories;
     CategoryFullModel categoryFullModel;
     TblProductsDAO products;
     ProductFullModel productFullModel;
     boolean addNewCategory = true;
     boolean addNewProduct = true;
+    Log log;
 
     /**
      * Creates new form MainForm
@@ -38,21 +40,43 @@ public class MainForm extends javax.swing.JDialog {
      * @throws java.sql.SQLException
      * @throws java.lang.ClassNotFoundException
      */
-    public MainForm(java.awt.Frame parent, boolean modal) throws SQLException, ClassNotFoundException {
+    public MainForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        categories = new TblCategoriesDAO();
-        categories.loadFromDB();
-        categoryFullModel = new CategoryFullModel(categories);
-        btnDeleteCate.setEnabled(false);
-        btnSaveCate.setEnabled(false);
-        btnDeleteProduct.setEnabled(false);
-        btnSaveProduct.setEnabled(false);
-        products = new TblProductsDAO();
-        products.loadFromDB(categories);
-        productFullModel = new ProductFullModel(products);
-        setupModel();
-
+        loginForm = (LoginForm) parent;
+        if (loginForm.name.isEmpty()) {
+            parent.setVisible(true);
+            this.dispose();
+        } else {
+            parent.setVisible(false);
+            lbFullName.setText("Welcome " + loginForm.name);
+            categories = new TblCategoriesDAO();
+            categoryFullModel = new CategoryFullModel(categories);
+            btnDeleteCate.setEnabled(false);
+            btnSaveCate.setEnabled(false);
+            btnDeleteProduct.setEnabled(false);
+            btnSaveProduct.setEnabled(false);
+            products = new TblProductsDAO();
+            try {
+                categories.loadFromDB();
+                products.loadFromDB(categories);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Server is stopped.");
+                Log.logger.setLevel(Level.SEVERE);
+                Log.logger.severe("Server is stopped.");
+            } catch (ClassNotFoundException ex) {
+                Log.logger.setLevel(Level.SEVERE);
+                Log.logger.severe(ex.getMessage());
+            }
+            productFullModel = new ProductFullModel(products);
+            setupModel();
+            try {
+                log = new Log("log.txt");
+            } catch (SecurityException | IOException ex) {
+                Log.logger.setLevel(Level.SEVERE);
+                Log.logger.severe(ex.getMessage());
+            }
+        }
     }
 
     public final void setupModel() {
@@ -71,6 +95,7 @@ public class MainForm extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        lbFullName = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -117,15 +142,23 @@ public class MainForm extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        lbFullName.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lbFullName)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 41, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lbFullName)
+                .addContainerGap())
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Detailed part:"));
@@ -184,12 +217,11 @@ public class MainForm extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(lbDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
-                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(lbCategoryID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtCategoryID)
-                                .addComponent(txtCategoryName)
-                                .addComponent(txtDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
-                                .addComponent(lbCategoryName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                            .addComponent(lbCategoryID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtCategoryID)
+                            .addComponent(txtCategoryName)
+                            .addComponent(txtDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
+                            .addComponent(lbCategoryName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(38, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -510,15 +542,21 @@ public class MainForm extends javax.swing.JDialog {
     public boolean checkEmptyFieldCategory() {
         if (txtCategoryID.getText().trim().isEmpty()) {
             lbCategoryID.setText("Category ID must'n be empty");
+            Log.logger.setLevel(Level.SEVERE);
+            Log.logger.severe("Category ID must'n be empty");
             return true;
         } else if (txtCategoryName.getText().trim().isEmpty()) {
             lbCategoryID.setText("");
             lbCategoryName.setText("Category Name must'n be empty");
+            Log.logger.setLevel(Level.SEVERE);
+            Log.logger.severe("Category Name must'n be empty");
             return true;
         } else if (txtDescription.getText().trim().isEmpty()) {
             lbCategoryName.setText("");
             lbCategoryID.setText("");
             lbDescription.setText("Description must'n be empty");
+            Log.logger.setLevel(Level.SEVERE);
+            Log.logger.severe("Description must'n be empty");
             return true;
         }
         return false;
@@ -547,11 +585,13 @@ public class MainForm extends javax.swing.JDialog {
 //      Kiểm tra trạng thái addNewCategory để thêm hoặc sửa
         if (addNewCategory) {
             try {
-//      Add Category Function
+//      ADD NEW CATEGORY FUNCTION
 //      Kiểm tra category trùng      
                 boolean duplicateCate = categories.findCategory(categoryID);
                 if (duplicateCate) {
                     JOptionPane.showMessageDialog(this, "Duplicate categoryID");
+                    Log.logger.setLevel(Level.SEVERE);
+                    Log.logger.severe("Duplicate categoryID");
                 } else {
                     boolean rsInsert = categories.insertCategory(dto);
                     if (rsInsert) {
@@ -563,14 +603,18 @@ public class MainForm extends javax.swing.JDialog {
                         JOptionPane.showMessageDialog(this, "Date save");
                     } else {
                         JOptionPane.showMessageDialog(this, "Can't Save");
+                        Log.logger.setLevel(Level.SEVERE);
+                        Log.logger.severe("Can't Save");
                     }
                 }
             } catch (SQLException | ClassNotFoundException ex) {
                 Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+                Log.logger.setLevel(Level.SEVERE);
+                Log.logger.severe(ex.getMessage());
             }
         } else {
             try {
-//      Update function
+//      UPDATE CATEGORY FUNCTION
                 boolean rsUpdate = categories.updateCategory(categoryID, categoryName, description);
                 if (rsUpdate) {
                     int rowSelect = tblCategory.getSelectedRow();
@@ -586,12 +630,16 @@ public class MainForm extends javax.swing.JDialog {
                     categoryFullModel.getCategories().set(rowSelect, dto);
 //      Cập nhật lại thông tin trong bảng cate
                     tblCategory.updateUI();
+                    cbCategoryName.setSelectedItem(dto);
                     JOptionPane.showMessageDialog(this, "Data save");
                 } else {
                     JOptionPane.showMessageDialog(this, "can't save");
+                    Log.logger.setLevel(Level.SEVERE);
+                    Log.logger.severe("can't save");
                 }
             } catch (SQLException | ClassNotFoundException ex) {
-                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+                Log.logger.setLevel(Level.SEVERE);
+                Log.logger.severe(ex.getMessage());
             }
             addNewCategory = true;
         }
@@ -603,12 +651,14 @@ public class MainForm extends javax.swing.JDialog {
         if (rsChoice == JOptionPane.YES_OPTION) {
             boolean rsDelete;
             try {
-//      Delete Function
+//      DELETE CATEGORY FUNCTION
                 if (!addNewCategory) {
 //      Kiểm tra category có chứa product nào không
                     boolean checkCategory = products.findProduct(categoryID);
                     if (checkCategory) {
                         JOptionPane.showMessageDialog(this, "Please delete product which contain this category first");
+                        Log.logger.setLevel(Level.SEVERE);
+                        Log.logger.severe("Please delete product which contain this category first");
                         return;
                     } else {
                         int selectRow = tblCategory.getSelectedRow();
@@ -625,13 +675,18 @@ public class MainForm extends javax.swing.JDialog {
                             JOptionPane.showMessageDialog(this, "Delete successfully !!");
                         } else {
                             JOptionPane.showMessageDialog(this, "Can't delete");
+                            Log.logger.setLevel(Level.SEVERE);
+                            Log.logger.severe("Can't delete");
                         }
                     }
                 } else {
                     JOptionPane.showMessageDialog(this, "Can't delete");
+                    Log.logger.setLevel(Level.SEVERE);
+                    Log.logger.severe("Can't delete");
                 }
             } catch (SQLException | ClassNotFoundException ex) {
-                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+                Log.logger.setLevel(Level.SEVERE);
+                Log.logger.severe(ex.getMessage());
             }
             addNewCategory = true;
         }
@@ -668,21 +723,29 @@ public class MainForm extends javax.swing.JDialog {
     public boolean checkEmptyFieldProduct() {
         if (txtProductID.getText().trim().isEmpty()) {
             lbProductID.setText("Product ID musn't be empty");
+            Log.logger.setLevel(Level.SEVERE);
+            Log.logger.severe("Product ID musn't be empty");
             return true;
         } else if (txtProductName.getText().trim().isEmpty()) {
             lbProductID.setText("");
             lbProductName.setText("Product Name must'n be empty");
+            Log.logger.setLevel(Level.SEVERE);
+            Log.logger.severe("Product Name must'n be empty");
             return true;
         } else if (txtUnit.getText().trim().isEmpty()) {
             lbProductID.setText("");
             lbProductName.setText("");
             lbUnit.setText("Unit must'n be empty");
+            Log.logger.setLevel(Level.SEVERE);
+            Log.logger.severe("Unit must'n be empty");
             return true;
         } else if (txtQuantity.getText().trim().isEmpty()) {
             lbProductID.setText("");
             lbProductName.setText("");
             lbUnit.setText("");
             lbQuantity.setText("Quantity must't be empty");
+            Log.logger.setLevel(Level.SEVERE);
+            Log.logger.severe("Quantity must't be empty");
             return true;
         } else if (txtPrice.getText().trim().isEmpty()) {
             lbProductID.setText("");
@@ -690,6 +753,8 @@ public class MainForm extends javax.swing.JDialog {
             lbUnit.setText("");
             lbQuantity.setText("");
             lbPrice.setText("Price must'n be empty");
+            Log.logger.setLevel(Level.SEVERE);
+            Log.logger.severe("Price must'n be empty");
             return true;
         }
         return false;
@@ -717,30 +782,47 @@ public class MainForm extends javax.swing.JDialog {
         }
         String productID = txtProductID.getText();
         String productName = txtProductName.getText();
-        String unit = txtUnit.getText();        
-        float price = 0;
-        int quantity = 0;
+        String unit = txtUnit.getText();
+        float price;
+        int quantity;
 //      Kiểm tra điều kiện nhập quantity
-        try {            
+        try {
             quantity = Integer.parseInt(txtQuantity.getText());
+            if (quantity <= 0) {
+                lbQuantity.setText("Quantity must be greater than 0");
+                Log.logger.setLevel(Level.SEVERE);
+                Log.logger.severe("Quantity must be greater than 0");
+                return;
+            }
         } catch (NumberFormatException e) {
-            lbQuantity.setText("Quantity must be integer");            
+            lbQuantity.setText("Quantity must be integer");
+            Log.logger.setLevel(Level.SEVERE);
+            Log.logger.severe("Quantity must be integer");
             return;
         }
 //      Kiểm tra điều kiện nhập price
         try {
             price = Float.parseFloat(txtPrice.getText());
+            if (price <= 0) {
+                lbQuantity.setText("");
+                lbPrice.setText("Price must be greater than 0");
+                Log.logger.setLevel(Level.SEVERE);
+                Log.logger.severe("Price must be greater than 0");
+                return;
+            }
         } catch (NumberFormatException e) {
             lbQuantity.setText("");
             lbPrice.setText("Price must be float");
+            Log.logger.setLevel(Level.SEVERE);
+            Log.logger.severe("Price must be float");
             return;
         }
-        
+
         TblCategoriesDTO category = (TblCategoriesDTO) cbCategoryName.getSelectedItem();
         TblProductsDTO dto = new TblProductsDTO(productID, productName, unit, price, quantity, category);
 //      Kiểm tra trạng thái của addNewProduct để thêm product hay update Product
         if (addNewProduct) {
-//      Add new Product function
+//      ADD NEW PRODUCT FUNCTION
             try {
                 boolean rsAddProduct = products.insertProduct(dto);
                 if (rsAddProduct) {
@@ -753,11 +835,12 @@ public class MainForm extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(this, "Data save");
                 }
             } catch (SQLException | ClassNotFoundException ex) {
-                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+                Log.logger.setLevel(Level.SEVERE);
+                Log.logger.severe(ex.getMessage());
             }
         } else {
             try {
-//      Update product function
+//      UPDATE PRODUCT FUNCTION
                 boolean rsUpdateProduct = products.updateProduct(dto);
                 if (rsUpdateProduct) {
                     int selectRow = tblProducts.getSelectedRow();
@@ -774,7 +857,8 @@ public class MainForm extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(this, "Data save");
                 }
             } catch (SQLException | ClassNotFoundException ex) {
-                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+                Log.logger.setLevel(Level.SEVERE);
+                Log.logger.severe(ex.getMessage());
             }
         }
         addNewProduct = true;
@@ -787,7 +871,7 @@ public class MainForm extends javax.swing.JDialog {
             if (choice == JOptionPane.YES_OPTION) {
                 int selectRow = tblProducts.getSelectedRow();
                 try {
-//      Delete Product Function
+//      DELETE PRODUCT FUNCTION
                     boolean rsDelete = products.deleteProducts(productID);
                     if (rsDelete) {
                         productFullModel.getProducts().remove(selectRow);
@@ -801,10 +885,13 @@ public class MainForm extends javax.swing.JDialog {
                         JOptionPane.showMessageDialog(this, "Delete Successfully !!");
                     } else {
                         JOptionPane.showMessageDialog(this, "Delete failed !!");
+                        Log.logger.setLevel(Level.SEVERE);
+                        Log.logger.severe("Delete failed !!");
                     }
                     addNewProduct = true;
                 } catch (SQLException | ClassNotFoundException ex) {
-                    Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+                    Log.logger.setLevel(Level.SEVERE);
+                    Log.logger.severe(ex.getMessage());
                 }
             }
         }
@@ -840,14 +927,7 @@ public class MainForm extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                MainForm dialog = null;
-                try {
-                    dialog = new MainForm(new javax.swing.JFrame(), true);
-                } catch (SQLException ex) {
-                    Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                LoginForm dialog = new LoginForm();
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -889,6 +969,7 @@ public class MainForm extends javax.swing.JDialog {
     private javax.swing.JLabel lbCategoryID;
     private javax.swing.JLabel lbCategoryName;
     private javax.swing.JLabel lbDescription;
+    private javax.swing.JLabel lbFullName;
     private javax.swing.JLabel lbPrice;
     private javax.swing.JLabel lbProductID;
     private javax.swing.JLabel lbProductName;

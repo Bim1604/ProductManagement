@@ -6,9 +6,10 @@
 package dang.gui;
 
 import dang.dao.TblUsersDAO;
+import dang.logger.Log;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,11 +18,21 @@ import javax.swing.JOptionPane;
  */
 public class LoginForm extends javax.swing.JFrame {
 
+    public String name = "";
+    Log log = null;
+
     /**
      * Creates new form LoginForm
      */
     public LoginForm() {
         initComponents();
+        try {
+            log = new Log("log.txt");
+        } catch (IOException | SecurityException e) {
+            Log.logger.setLevel(Level.SEVERE);
+            Log.logger.info(e.getMessage());
+            Log.logger.severe(e.getMessage());
+        }
     }
 
     /**
@@ -102,20 +113,31 @@ public class LoginForm extends javax.swing.JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         String username = txtUsername.getText();
         String password = txtPassword.getText();
+        if (username.equals("") || password.equals("")) {
+            JOptionPane.showMessageDialog(this, "Invalid Username or Password");
+            Log.logger.setLevel(Level.SEVERE);
+            Log.logger.severe("Invalid Username or Password");
+            return;
+        }
         TblUsersDAO userDAO = new TblUsersDAO();
         try {
-            String name = userDAO.checkLogin(username, password);
-            if (!name.isEmpty()) {
+            name = userDAO.checkLogin(username, password);
+            if (name.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Invalid Username or Password");
+                Log.logger.setLevel(Level.SEVERE);
+                Log.logger.severe("Invalid Username or Password");
+            } else {
                 JOptionPane.showMessageDialog(this, "Welcome " + name);
                 txtPassword.setText("");
                 this.dispose();
                 MainForm mainForm = new MainForm(this, true);
                 mainForm.setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(this, "Invalid Username of Password");
             }
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NullPointerException | ClassNotFoundException | SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Invalid Username or Password");
+            Log.logger.setLevel(Level.SEVERE);
+            Log.logger.severe("Invalid Username or Password");
+            Log.logger.severe(ex.getMessage());
         }
 
     }//GEN-LAST:event_btnLoginActionPerformed

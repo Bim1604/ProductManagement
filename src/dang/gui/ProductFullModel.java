@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dang.dto;
+package dang.gui;
 
 import dang.dao.TblProductsDAO;
+import dang.dto.TblProductsDTO;
 import javax.swing.table.AbstractTableModel;
 
 /**
